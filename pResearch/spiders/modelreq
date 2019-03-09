@@ -1,0 +1,32 @@
+Datos interesantes a extaer de las publicaciones
+
+- Nombre del producto
+- Precion de venta
+- categoria
+- calificacioin del produccto
+- ubucacion
+
+
+despues de hacer unescaneo dee todos los productos poscibles, se propone desarrollar algun filtro de tal manera que se seleccione
+u top de prouctos con la mejor relacion precios / numero de ventas.  Estos prodcuctos posterior mente seran
+monitoreados para calcular un rata de cambio en el numero de ventas e identificar asi los productos con
+mas rapidos crecimiento en el numero de ventas
+
+investigacion de amazon colombia
+
+filtros
+
+funciones
+- anexar job directory para poder pausar y reanudar the spider when is needed
+
+
+Anexar un spider que tome el top de los productos mas destacados y les realice un seguimiento mas frecuente
+
+
+criterios de venta de productos
+
+- rango de precios, mayor a xxx y menor a xxxx
+- El producto debe ser de compra recurrentem , no debe ser compra unica, el producto ideal el cliente lo debera comprar regularmente durente
+la mayor cantidad de tiempo posible
+
+
