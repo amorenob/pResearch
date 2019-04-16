@@ -1,0 +1,7 @@
+.idea
+.vscode
+build
+env
+cache
+project.egg-info
+wdir

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import os
 # Scrapy settings for pResearch project
 #
 # For simplicity, this file contains only settings considered important or
@@ -10,7 +10,6 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
 BOT_NAME = 'pResearch'
-
 SPIDER_MODULES = ['pResearch.spiders']
 NEWSPIDER_MODULE = 'pResearch.spiders'
 
@@ -20,7 +19,7 @@ NEWSPIDER_MODULE = 'pResearch.spiders'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
-DOWNLOAD_DELAY = 1
+DOWNLOAD_DELAY = 2
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 
@@ -68,9 +67,10 @@ DOWNLOAD_DELAY = 1
 #    'pResearch.pipelines.PresearchPipeline': 300,
 #}
 
-#ITEM_PIPELINES = {
-#    'pResearch.pipelines.PresearchPipelinePgsqlDB': 300,
-#}
+ITEM_PIPELINES = {
+    'pResearch.pipelines.JustOnePerDayPipeline': 200,
+    'pResearch.pipelines.MongoPipeline': 300,
+}
 
 #DATABASE = {
 #    'drivername': 'postgres',
@@ -81,6 +81,9 @@ DOWNLOAD_DELAY = 1
 #    'database': 'mclProducts'
 #}
 
+
+MONGO_URI = os.environ["MONGO_URI"]
+MONGO_DATABASE = os.environ["MONGO_DATABASE"]
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
