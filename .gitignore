@@ -5,3 +5,4 @@ env
 cache
 project.egg-info
 wdir
+scrapinghub.yml
