@@ -48,6 +48,7 @@ DOWNLOAD_DELAY = 1
 #SPIDER_MIDDLEWARES = {
 #    'pResearch.middlewares.PresearchSpiderMiddleware': 543,
 #}
+#DUPEFILTER_CLASS = 'pResearch.custom_filters.SeenURLFilter'
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
@@ -68,18 +69,18 @@ DOWNLOAD_DELAY = 1
 #}
 
 ITEM_PIPELINES = {
-    'pResearch.pipelines.JustOnePerDayPipeline': 200,
-    'pResearch.pipelines.MongoPipeline': 300,
+    'pResearch.pipelines.JustOnePerWeekPipeline': 200,
+    #'pResearch.pipelines.MongoPipeline': 300,
 }
 
-#DATABASE = {
-#    'drivername': 'postgres',
-#    'host': 'localhost',
-#    'port': '5432',
-#    'username': 'scrapypipeline',
-#    'password': '.-.Scrapy',
-#    'database': 'mclProducts'
-#}
+DATABASE = {
+   'drivername': 'postgres',
+   'host': 'localhost',
+   'port': '5432',
+   'username': os.environ["PGSQL_DB_USER"],
+   'password': os.environ["PGSQL_DB_PASS"],
+   'database': os.environ["PGSQL_DB_NAME"]
+}
 
 
 MONGO_URI = os.environ["MONGO_URI"]

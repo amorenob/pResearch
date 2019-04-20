@@ -7,43 +7,53 @@
 
 import pymongo
 import os
-import csv
 from datetime import datetime as dt
 from scrapy.exceptions import DropItem
 from sqlalchemy.orm import sessionmaker
 from pResearch.models import Products, HInfo, db_connect, create_deals_table
 
 # import logging
-# import pymongo
 
-class JustOnePerDayPipeline(object):
+
+class JustOnePerWeekPipeline(object):
+    """Pipeline for keeping a weekly cache file of seen items"""
     path = os.curdir + '/cache'
     
     def __init__(self):
         self.seen_item = set()
-        self.fname = self.path+ '/'+ dt.today().strftime('%Y%m%d') + '.csv'
+        self.fname = '_'.join(['seen', dt.today().strftime('%Y%m'), "w", self.week_of_month()])
+        self.file = None
 
+    def week_of_month(self):
+        """ Returns the week of the month for the specified date.
+        """
+        day_of_month = dt.today().day
+        return str((day_of_month - 1) // 7 + 1)
+    
     def open_spider(self, spider):
+        """ Update seen items set from file
+        """
         if not os.path.exists(self.path):
             os.makedirs(self.path)
-        if os.path.isfile(self.fname):
-            with open(self.fname, 'r') as f:
-                self.seen_item.update([sku.strip() for sku in f])
+        file_name =  '_'.join(['seen', dt.today().strftime('%Y%m'), "w", self.week_of_month()])
+        self.file = open(os.path.join(self.path, file_name), 'a+')
+        self.file.seek(0)
+        self.seen_item.update(x.rstrip() for x in self.file)
+
 
     def close_spider(self, spider):
-        with open(self.fname, 'w') as outf:
-            writer = csv.writer(outf,  delimiter='\n')
-            writer.writerow(list(self.seen_item))
+        self.file.close()
 
     def process_item(self, item, spider):
         if item['sku'] in self.seen_item:
             raise DropItem("Duplicate item found: %s" % item)
         else:
             self.seen_item.add(item['sku'])
+            self.file.write(item['sku'] + os.linesep)
             return item
 
 class PresearchPipelinePgsqlDB(object):
-    """Livingsocial pipeline for storing scraped items in the database"""
+    """Pipeline for storing scraped items in the  Pgsql database"""
 
     def __init__(self):
         self.crawled_items = []

@@ -18,7 +18,7 @@ class MlibreSpider(scrapy.Spider):
 
     def parse_urls(self, response):
         urls = response.css('span.ch-g1-3 a::attr(href)').extract()
-        for url in urls:
+        for url in urls[:2]:
             print("Crawling url: {0}".format(url))
             yield scrapy.Request(url=url+"_BestSellers_YES", callback=self.parse)
 
