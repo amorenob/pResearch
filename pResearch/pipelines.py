@@ -14,6 +14,14 @@ from pResearch.models import Products, HInfo, db_connect, create_deals_table
 
 # import logging
 
+class ItemFilterPipeline(object):
+    """ Pipeline for filtering items by 
+    """
+    def process_item(self, item, spider):
+        if item['qty_sold'] < 20 or (item['qty_sold'] * item['price']) < 500000:
+            raise DropItem("Item do not pass the criteria: {0}".format(item))
+        else:
+            return item
 
 class JustOnePerWeekPipeline(object):
     """Pipeline for keeping a weekly cache file of seen items"""
@@ -56,7 +64,6 @@ class PresearchPipelinePgsqlDB(object):
     """Pipeline for storing scraped items in the  Pgsql database"""
 
     def __init__(self):
-        self.crawled_items = []
         """
         Initializes database connection and sessionmaker.
         Creates deals table.
@@ -71,10 +78,6 @@ class PresearchPipelinePgsqlDB(object):
         This method is called for every item pipeline component.
 
         """
-        # skip item if it has alredy been loaded
-        if item['id'] in self.crawled_items:
-            return item
-        self.crawled_items.append(item['id'])
         prices_subitem = {k: item[k] for k in ('date', 'date_str', 'price', 'id', 'sells') if k in item}
         prices_subitem['id_product'] = prices_subitem.pop('id')
         session = self.Session()

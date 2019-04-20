@@ -43,8 +43,8 @@ class MlibreSpider(scrapy.Spider):
             sells_search = re.findall("([0-9]*) vendidos", sale_info)
             qty_sold = int(sells_search[0]) if sells_search else 0
             # Filter products by sales
-            if qty_sold < 20 or (qty_sold * price) < 500000:
-                continue
+            # if qty_sold < 20 or (qty_sold * price) < 500000:
+            #     continue
             location_search = re.findall("vendidos - (.*)", sale_info)
             location = location_search[0] if location_search else ''
             item = PresearchItem()

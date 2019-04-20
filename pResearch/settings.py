@@ -69,7 +69,8 @@ DOWNLOAD_DELAY = 1
 #}
 
 ITEM_PIPELINES = {
-    'pResearch.pipelines.JustOnePerWeekPipeline': 200,
+    'pResearch.pipelines.ItemFilterPipeline':200,
+    'pResearch.pipelines.JustOnePerWeekPipeline': 250,
     #'pResearch.pipelines.MongoPipeline': 300,
 }
 
