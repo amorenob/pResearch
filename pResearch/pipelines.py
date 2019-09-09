@@ -15,7 +15,7 @@ from pResearch.models import Products, HInfo, db_connect, create_deals_table
 # import logging
 
 class ItemFilterPipeline(object):
-    """ Pipeline for filtering items by 
+    """ Pipeline for filtering items by price and qty sold
     """
     def process_item(self, item, spider):
         if item['qty_sold'] < 20 or (item['qty_sold'] * item['price']) < 500000:
@@ -99,7 +99,7 @@ class PresearchPipelinePgsqlDB(object):
 
 class MongoPipeline(object):
     collection_name = 'mlProducts'
-    time_serie_collection_name = 'mlSales'
+    
     def __init__(self, mongo_uri, mongo_db):
         self.mongo_uri = mongo_uri
         self.mongo_db = mongo_db
@@ -119,9 +119,15 @@ class MongoPipeline(object):
         self.client.close()
 
     def process_item(self, item, spider):
-        #self.db[self.collection_name].insert_one(dict(item))
+        """save item in the database.
+
+        Update item on the db, if not creates a new one
+        add a new element on the sales record (time series sold quantites)
+
+        """
+         
         key = {'sku':item['sku']}
-        sales_info = {k: dict(item)[k] for k in ('qty_sold', 'sku')}
-        self.db[self.collection_name].update(key, item, upsert=True)
-        self.db[self.time_serie_collection_name].insert_one(sales_info)
+        sales_record = {'date':dt.utcnow(), 'qty_sold':item['qty_sold']}
+        self.db[self.collection_name].update(key, {'$set':item}, upsert=True)
+        self.db[self.collection_name].update(key, {'$push': {'sales_record':sales_record}})
         return item

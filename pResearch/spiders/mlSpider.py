@@ -13,12 +13,14 @@ class MlibreSpider(scrapy.Spider):
     #start_urls = ['http://www.mercadolibre.com/']
     def start_requests(self):
         #update categories
-        url = 'https://www.mercadolibre.com.co/categories.html'
+        #url = 'https://www.mercadolibre.com.co/categories.html'
+        url = 'https://www.mercadolibre.com.co/categorias#menu=categories'
         yield scrapy.Request(url=url, callback=self.parse_urls)
 
     def parse_urls(self, response):
-        urls = response.css('span.ch-g1-3 a::attr(href)').extract()
-        for url in urls[:2]:
+        #urls = response.css('li.categories__item a::attr(href)').extract()
+        urls=['https://celulares.mercadolibre.com.co/huawei/']
+        for url in urls:
             print("Crawling url: {0}".format(url))
             yield scrapy.Request(url=url+"_BestSellers_YES", callback=self.parse)
 
