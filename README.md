@@ -8,7 +8,7 @@ Este proyecto utiliza el framework **Scrapy** para extraer información sobre lo
 
 * **Python 3.x**
 * **Scrapy**: El framework de código abierto y colaboración rápida para web scraping en Python.
-* **Pipenv (recomendado)**: Para gestionar las dependencias del proyecto de forma aislada y reproducible.
+
 
 ---
 
